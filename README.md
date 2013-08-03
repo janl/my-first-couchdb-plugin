@@ -1,6 +1,6 @@
 # My First CouchDB Plugin
 
-This is a practical guide to developing CouchDB plugins.
+A practical guide to developing CouchDB plugins.
 
 *NOTE: This is incomplete, barely tested, works only with the 1867-feature-plugin branch of Apache CouchDB and expects that you understand some Erlang. This is mostly for early review, but if you are daring, you can learn someting already :)*
 
