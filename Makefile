@@ -1,5 +1,5 @@
 # Customize here
-NAME=my-first-couchdb-plugin
+NAME=my_first_couchdb_plugin
 VERSION=1.0.0
 # Stop customizing here
 
@@ -14,6 +14,9 @@ all: compile
 
 compile:
 	rebar compile
+
+dev:
+	@ERL_LIBS=$(shell pwd) couchdb -i
 
 plugin: compile
 	mkdir -p $(PLUGIN_DIST)
