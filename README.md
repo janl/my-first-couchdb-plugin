@@ -25,16 +25,12 @@ Next, install *rebar* from <https://github.com/rebar/rebar>. Rebar is a build to
 
 `src/my_first_couchdb_plugin.erl` now should look like this:
 
-```erlang
-
     -module(my_first_couchdb_plugin).
 
     -export([my_func/0]).
 
     my_func() ->
         ok.
-
-```
 
 It doesn’t do much, but you get your first module going. Let’s try to compile it.
 
