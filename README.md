@@ -18,19 +18,8 @@ Next, install *rebar* from <https://github.com/rebar/rebar>. Rebar is a build to
 
 ## Quick Start
 
-We start by creating a new rebar project:
 
-    rebar create template=simplemod modid=my_first_couchdb_plugin
-
-Rebar allows to create different types of projects. We’ll start with a simple module, hence `template=simplemod` and we want to call it `my_first_couchdb_plugin`, hence `modid=my_first_couchdb_plugin`.
-
-This should show you something like this:
-
-    ==> my_first_couchdb_plugin (create)
-    Writing src/my_first_couchdb_plugin.erl
-    Writing test/my_first_couchdb_plugin_tests.erl
-
-Rebar creates two directories `src` and `test` with an `.erl` file in them each. `src/my_first_couchdb_plugin.erl` is where our module code will live and `test/my_first_couchdb_plugin_tests.erl` will contain any tests for that code.
+`my_first_couchdb_plugin` includes two directories `src` and `test` with an `.erl` file in them each. `src/my_first_couchdb_plugin.erl` is where our module code will live and `test/my_first_couchdb_plugin_tests.erl` will contain any tests for that code.
 
 `src/my_first_couchdb_plugin.erl` now should look like this:
 
