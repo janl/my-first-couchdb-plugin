@@ -19,8 +19,8 @@ dev:
 	@ERL_LIBS=$(shell pwd) couchdb -i
 
 plugin: compile
-	mkdir -p $(PLUGIN_DIRS)
-	mkdir -p $(PLUGIN_DIST)
-	cp -r $(PLUGIN_DIRS) $(PLUGIN_DIST)
-	tar czf $(PLUGIN_VERSION_SLUG).tar.gz $(PLUGIN_DIST)
+	@mkdir -p $(PLUGIN_DIRS)
+	@mkdir -p $(PLUGIN_DIST)
+	@cp -r $(PLUGIN_DIRS) $(PLUGIN_DIST)
+	@tar czf $(PLUGIN_VERSION_SLUG).tar.gz $(PLUGIN_DIST)
 	@$(ERL) -eval 'File = "$(PLUGIN_VERSION_SLUG).tar.gz", {ok, Data} = file:read_file(File),io:format("~s: ~s~n", [File, base64:encode(crypto:sha(Data))]),halt()' -noshell
