@@ -84,5 +84,95 @@ That is all that is needed to get started building a CouchDB plugin. The rest of
 
 * * *
 
+
 ## Publishing a Plugin
+
+Publishing a plugin is both simple and not so simple. The mechanics are trivial, just type:
+
+    make plugin
+
+and you will see something like this:
+
+    > make plugin
+    rebar compile
+    ==> my_first_couchdb_plugin (compile)
+    my_first_couchdb_plugin-1.0.0-R15B03-1.4.0.tar.gz: 1/MeXYfxeBK7DQyk10/6ucIRusc=
+
+That’s the easy part. The hard part is publishing the plugin. And since this is subject to change a lot in the near future, we will punt on explaining this in detail here, but to see how it works, look into this file in the CouchDB source distribution: `share/www/plugins.html`
+
+* * *
+
+
+## Creating an HTTP Handler
+
+Our module above is not very useful on its own. You can call it when you are in the Erlang command prompt for your local CouchDB, but CouchDB itself doesn’t know what to do with it and you can’t do anything with it from CouchDB’s HTTP API. Let’s fix that!
+
+CouchDB’s main API is HTTP and thus we can expect to have a lot of infrastructure to work with. Luckily, it is mostly straigtforward to get into and we don’t need to learn a whole lot before can get started, and learn more as we go along.
+
+Before ge get goint, let’s create another file that handles all our HTTP handler code. Create `src/my_first_couchdb_plugin_httpd.erl` and put in the following contents:
+
+    -module(my_first_couchdb_plugin_httpd).
+
+    -export([handle_req/1]).
+
+    -include_lib("couch/include/couch_db.hrl").
+
+    handle_req(#httpd{method='GET'}=Req) ->
+        couch_httpd:send_json(Req, {[{<<"hello">>, <<"world">>}]});
+    handle_req(Req) ->
+        couch_httpd:send_method_not_allowed(Req, "GET").
+
+Let’s go through this line by line:
+
+1. We define the module name, nothing to see here, move along.
+3. We export the function `handle_req`, e.g. we make it available to other modules.
+5. We include the standard CouchDB header. That gives us access to the internal data structures.
+7. We define the function `handle_req`. In particular, we define a clause of that function in a way that it gets invoked whenever CouchDB receives an HTTP `GET` request. It takes one argument, `Req` and it it includes all HTTP request information. `Req` is an instance of the record type `#httpd{}` that we will learn a lot more about in the future.
+8. We return a bit of JSON, the Erlang, or ejson, equivalent of `{"hello":"world"}`.
+9. We define the final, or default clause for the `handle_req` function. This is a default for all `handle_req` functions and handles the case when an API endpoint was called with an unsupported HTTP method, or path or other request parameters. In our case it will say that our `handle_req` only ever will handle `GET` requests and if it ever sees anything else, a standard “method not allowed” response will be generated for us.
+
+
+### Registering an HTTP Handler
+
+Now we have a function that can handle HTTP requests, but we haven’t told CouchDB yet, for what API endpoint this should be called.
+
+To do this, we need to take a little detour into the CouchDB configuration system, as CouchDB’s HTTP routing is fully dynamic and configurable at runtime.
+
+To get an idea, open this file in CouchDB source directory: `etc/couchdb/default.ini.tpl.in`, don’t mind the triple file extensions, this is essentialy an `.ini` file. Now scroll down to the section `[httpd_global_handlers]`. You will find a list of API endpoints with mapping to the code in CouchDB that handles it. for example:
+
+    _utils = {couch_httpd_misc_handlers, handle_utils_dir_req, "%localdatadir%/www"}
+
+This means that `/_utils` is handled by the erlang module `couch_httpd_misc_handlers` and its function `handle_utils_dir_req` and it takes one additinal argument that is the document root for Futon.
+
+Another example:
+
+    _all_dbs = {couch_httpd_misc_handlers, handle_all_dbs_req}
+
+This means that `/_all_dbs`, the API endpoint that allows you to list all databases in CouchDB is handled by, again, `couch_httpd_misc_handlers` but this time its function `handle_all_dbs_req`, which does not take an additional argument.
+
+Say we want to make our `handle_req` function answer under the enpoint `/_my_plugin` (you want to start with an underscore here, as CouchDB will consider all other characters as real database names), we would add something like this:
+
+    _my_plugin = {my_first_couchdb_plugin, handle_req}
+
+But don’t add that to `etc/couchdb/default.ini.tpl.in`! Instead, craete a new `.ini` file in your plugin at `priv/default.d/my_first_couchdb_plugin.ini` with these contents:
+
+    [httpd_global_handlers]
+    _my_plugin = {my_first_couchdb_plugin_httpd, handle_req}
+    
+
+Don’t miss the new line at the end.
+
+Now run `make dev` again, and then open a second terminal:
+
+    curl http://127.0.0.1:5984/_my_plugin
+    {"hello":"world"}
+
+It worked, yay!
+
+
+// creating an httpd handler
+// creating a module
+// creating a daemon
+// runtime configuration
+
 // what can go wrong at this step...
