@@ -76,7 +76,13 @@ And then enter. The full stop at the end is essential. The output should look li
 
 `ok` is the return value of your function, if you remember the code of `my_first_couchdb_plugin,erl`, you see `ok` is the last statement before the final full stop in the function definition of `my_func()` and thus, it is the return value of that function and we see it in the command prompt. Then the command prompt waits for your next line of input with `2>` (the number increases with each entered command). To get out of the command prompt and to stop CouchDB, just hit `ctrl-c` twice.
 
+Note: from now on you can just type `make dev`, it will run `make` for you internally and compile all changes you may have made in the meantime.
 
+* * *
 
+That is all that is needed to get started building a CouchDB plugin. The rest of this guide will explain how to hook into the various parts of CouchDB that allow you to do all sorts of fun things. That means you can write different types of plugins, once that handle HTTP requests, others that operate on database changes, and yet others that provide a deamon that does useful things for us.
+
+* * *
+
+## Publishing a Plugin
 // what can go wrong at this step...
-// learn more about rebar at [list of refs]
