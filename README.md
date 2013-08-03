@@ -169,10 +169,18 @@ Now run `make dev` again, and then open a second terminal:
 
 It worked, yay!
 
+TODO:
+- show that POST fails as expected
+- exploring #httpd{} and how to react to different kinds of HTTP requests
+- hook up `handle_req` with `my_func`
+...
+* * *
 
-// creating an httpd handler
-// creating a module
-// creating a daemon
-// runtime configuration
 
-// what can go wrong at this step...
+## Creating a Daemon
+
+TBD
+
+
+TODO:
+-  add “what can go wrong at this step”
