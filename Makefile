@@ -13,10 +13,10 @@ PLUGIN_DIST=$(PLUGIN_VERSION_SLUG)
 all: compile
 
 compile:
-	rebar compile
+	ERL_LIBS=$(shell couch-config --erl-libs-dir):$(ERL_LIBS) rebar compile
 
 dev:
-	@ERL_LIBS=$(shell pwd) couchdb -i
+	@ERL_LIBS=$(shell pwd) couchdb -i -a priv/default.d/*.ini
 
 plugin: compile
 	@mkdir -p $(PLUGIN_DIRS)
