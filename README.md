@@ -173,6 +173,12 @@ Now run `make dev` again, and then open a second terminal:
 
 It worked, yay!
 
+When we do a `POST` request, that should fail:
+
+    curl -X POST http://127.0.0.1:5984/_my_plugin
+
+
+
 TODO:
 - show that POST fails as expected
 - exploring #httpd{} and how to react to different kinds of HTTP requests
